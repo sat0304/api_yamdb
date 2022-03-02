@@ -110,7 +110,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    """Таблица, содержащая коментарии к отзывам на произведение."""
+    """Таблица, содержащая комментарии к отзывам на произведение."""
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
