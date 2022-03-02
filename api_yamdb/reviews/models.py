@@ -3,7 +3,6 @@ from django.db.models import Avg
 from users.models import User
 
 
-
 class Category(models.Model):
     """Таблица, содержащая категории произведений."""
     name = models.CharField(max_length=30)
@@ -90,7 +89,7 @@ class Review(models.Model):
     )
     score = models.IntegerField(choices=SCORE_CHOICES, default=1)
     pub_date = models.DateTimeField(
-        'Дата публикации отзыва',
+        verbose_name='Дата публикации отзыва',
         auto_now_add=True,
     )
 
