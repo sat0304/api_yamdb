@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework.viewsets import GenericViewSet, mixins
 
-# Create your views here.
+
+class SignupViewSet(mixins.CreateModelMixin, GenericViewSet):
+    pass
+
+
+class TokenViewSet(mixins.UpdateModelMixin, GenericViewSet):
+    pass
