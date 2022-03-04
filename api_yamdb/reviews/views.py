@@ -1,23 +1,11 @@
-from django.core.mail import send_mail
-from django.db import IntegrityError
-from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status, viewsets
+from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly
-)
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import  Review, Comment
 from api.models import  Title
-from .permissions import (
-    IsAdminOrReadOnly,
-    IsAdminOrSuperUser,
-    ReviewCommentPermissions
-)
+from .permissions import ReviewCommentPermissions
 from .serializers import CommentSerializer, ReviewSerializer
 
 
