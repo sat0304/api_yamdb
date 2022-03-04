@@ -5,9 +5,9 @@ from users.models import User
 
 class Category(models.Model):
     """Таблица, содержащая категории произведений."""
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=254)
     slug = models.SlugField(
-        max_length=30,
+        max_length=50,
         unique=True
     )
 
@@ -20,9 +20,9 @@ class Category(models.Model):
 
 class Genre(models.Model):
     """Таблица, содержащая жанр произведения."""
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=256)
     slug = models.SlugField(
-        max_length=30,
+        max_length=50,
         unique=True
     )
 
@@ -36,7 +36,7 @@ class Genre(models.Model):
 class Title(models.Model):
     """Таблица, содержащая название произведения."""
     name = models.CharField(
-        max_length=90,
+        max_length=150,
         verbose_name='Название'
     )
     year = models.IntegerField(
@@ -73,7 +73,7 @@ class Title(models.Model):
 
 class Review(models.Model):
     """Таблица, содержащая отзывы на произведение."""
-    SCORE_CHOICES = zip(range(1, 11), range(1, 11))
+    SCORES = zip(range(1, 11), range(1, 11))
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -87,7 +87,7 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name='Автор',
     )
-    score = models.IntegerField(choices=SCORE_CHOICES, default=1)
+    score = models.IntegerField(choices=SCORES, default=1)
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации отзыва',
         auto_now_add=True,
