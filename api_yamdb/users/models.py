@@ -45,7 +45,7 @@ class User(AbstractUser):
                                   null=True,
                                   help_text='Имя пользователя',
                                   )
-    last_name = models.CharField('Имя',
+    last_name = models.CharField('Фамилия',
                                  max_length=150,
                                  blank=True,
                                  null=True,
