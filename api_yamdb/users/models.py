@@ -16,18 +16,29 @@ class User(AbstractUser):
                                 help_text='Ник пользователя',
                                 validators=[
                                     RegexValidator(
-                                        regex=r'^[\w.@+-]+\z',
+                                        regex=r'^[\w.@+-]+',
                                         message=('Ник должен быть '
                                                  + 'комбинацией букв,'
                                                  + 'цифр и символов @.+-_')
                                     )
                                 ]
                                 )
+    password = models.CharField('Пароль',
+                                max_length=128,
+                                blank=True,
+                                null=True,
+                                help_text='Пароль')
     email = models.EmailField('e-mail',
                               max_length=254,
                               unique=True,
                               help_text='Электронная почта',
                               )
+    confirmation_code = models.CharField('Код',
+                                         blank=True,
+                                         null=True,
+                                         max_length=9,
+                                         help_text='Код подтверждения'
+                                         )
     first_name = models.CharField('Имя',
                                   max_length=150,
                                   blank=True,
