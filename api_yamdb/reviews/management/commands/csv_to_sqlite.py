@@ -9,12 +9,12 @@ def import_files_csv_to_sqlite():
     c.execute(
         '''CREATE TABLE IF NOT EXISTS user (
         id INTEGER PRIMARY KEY,
-        username text,
-        email text,
-        role text,
-        bio text,
-        first_name text,
-        last_name text)'''
+        username TEXT,
+        email TEXT,
+        role TEXT,
+        bio TEXT,
+        first_name TEXT,
+        last_name TEXT)'''
     )
     with open('../api_yamdb/static/data/users.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
