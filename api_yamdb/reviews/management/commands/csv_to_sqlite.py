@@ -128,4 +128,5 @@ class Command(BaseCommand):
     help = 'Creates data base from CSV files'
 
     def handle(self, *args, **options):
+        '''Создание базы данных SQLITE3.'''
         import_files_csv_to_sqlite()
