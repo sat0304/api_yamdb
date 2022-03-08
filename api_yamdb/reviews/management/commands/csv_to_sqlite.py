@@ -4,7 +4,7 @@ import csv
 
     
 def import_files_csv_to_sqlite():
-    conn = sqlite3.connect('../db.sqlite2') 
+    conn = sqlite3.connect('../db.sqlite3') 
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS user (
