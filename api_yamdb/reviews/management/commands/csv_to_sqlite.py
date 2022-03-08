@@ -54,8 +54,8 @@ def import_files_csv_to_sqlite():
         "id" INTEGER PRIMARY KEY,
         "name" TEXT,
         "year" INTEGER,
-        "category" INTEGER,
-        FOREIGN KEY("category") REFERENCES "category"("id"))'''
+        "category_id" INTEGER,
+        FOREIGN KEY("category_id") REFERENCES "category"("id"))'''
     )
     with open('../api_yamdb/static/data/titles.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
