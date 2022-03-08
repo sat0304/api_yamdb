@@ -66,4 +66,4 @@ class Title(models.Model):
         verbose_name = 'Произведение'
 
     def __str__(self) -> str:
-        return f'Произведение {self.name}, рейтинг {self.rating}'
+        return self.name

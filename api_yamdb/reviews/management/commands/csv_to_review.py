@@ -7,18 +7,21 @@ def import_one_file_csv_to_sqlite():
     conn = sqlite3.connect('../db.sqlite2') 
     c = conn.cursor()
     c.execute(
-        '''CREATE TABLE IF NOT EXISTS title (
+        '''CREATE TABLE IF NOT EXISTS review (
         id INTEGER PRIMARY KEY,
-        name TEXT,
-        year INTEGER,
-        category INTEGER,
-        FOREIGN KEY(category) REFERENCES category(id))'''
+        title_id INTEGER,
+        text TEXT,
+        author TEXT,
+        score INTEGER,
+        pub_date TEXT,
+        FOREIGN KEY(title_id) REFERENCES title(id),
+        FOREIGN KEY(author) REFERENCES author(id))'''
     )
-    with open('../api_yamdb/static/data/titles.csv', 'r', encoding='utf-8') as f_open_csv:
+    with open('../api_yamdb/static/data/review.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
         first_row = next(rows)
         for row in rows:
-            c.execute('INSERT OR IGNORE INTO title VALUES (?, ?, ?, ?)', row)       
+            c.execute('INSERT OR IGNORE INTO review VALUES (?, ?, ?, ?, ?, ?)', row)       
     conn.commit()
     conn.close() 
 
