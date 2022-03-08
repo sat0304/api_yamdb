@@ -1,10 +1,11 @@
-from django.core.management.base import BaseCommand # , no_translations
+from django.core.management.base import BaseCommand
 import sqlite3
 import csv
 
-    
+
 def import_files_csv_to_sqlite():
-    conn = sqlite3.connect('./db.sqlite3') 
+    conn = sqlite3.connect('./db.sqlite3')
+    '''Создание таблицы USER.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "user" (
@@ -20,8 +21,9 @@ def import_files_csv_to_sqlite():
         rows = csv.reader(f_open_csv, delimiter=",")
         first_row = next(rows)
         for row in rows:
-            c.execute('INSERT OR IGNORE INTO "user" VALUES (?, ?, ?, ?, ?, ?, ?)', row)       
+            c.execute('INSERT OR IGNORE INTO "user" VALUES (?, ?, ?, ?, ?, ?, ?)', row)
     conn.commit()
+    '''Создание таблицы CATEGORY.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "category" (
@@ -35,6 +37,7 @@ def import_files_csv_to_sqlite():
         for row in rows:
             c.execute('INSERT OR IGNORE INTO "category" VALUES (?, ?, ?)', row)       
     conn.commit()
+    '''Создание таблицы GENRE.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "genre" (
@@ -48,6 +51,7 @@ def import_files_csv_to_sqlite():
         for row in rows:
             c.execute('INSERT OR IGNORE INTO "genre" VALUES (?, ?, ?)', row)       
     conn.commit()
+    '''Создание таблицы TITLE.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "title" (
@@ -63,6 +67,7 @@ def import_files_csv_to_sqlite():
         for row in rows:
             c.execute('INSERT OR IGNORE INTO "title" VALUES (?, ?, ?, ?)', row)       
     conn.commit()
+    '''Создание связанной таблицы GENRE_TITLE.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "genre_title" (
@@ -78,6 +83,7 @@ def import_files_csv_to_sqlite():
         for row in rows:
             c.execute('INSERT OR IGNORE INTO "genre_title" VALUES (?, ?, ?)', row)       
     conn.commit()
+    '''Создание таблицы REVIEW.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "review" (
@@ -96,6 +102,7 @@ def import_files_csv_to_sqlite():
         for row in rows:
             c.execute('INSERT OR IGNORE INTO "review" VALUES (?, ?, ?, ?, ?, ?)', row)       
     conn.commit()
+    '''Создание таблицы COMMENT.'''
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS "comment" (
