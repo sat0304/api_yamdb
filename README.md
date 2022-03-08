@@ -54,6 +54,12 @@ source venv/bin/activate
 
 python3 -m pip install --upgrade pip
 pip install -r requirements.txt
+
+Создать базу данных из CSV файлов, находящихся в папке STATIC
+при помощи команды:
+
+python3 manage.py csv_to_sqlite
+
 Выполнить миграции:
 
 python3 manage.py migrate
