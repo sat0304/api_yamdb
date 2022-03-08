@@ -8,7 +8,7 @@ def import_files_csv_to_sqlite():
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS user (
-        id TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY,
         username TEXT,
         email TEXT,
         role TEXT,
@@ -84,7 +84,7 @@ def import_files_csv_to_sqlite():
         id INTEGER PRIMARY KEY,
         title_id INTEGER,
         text TEXT,
-        author TEXT,
+        author INTEGER,
         score INTEGER,
         pub_date TEXT,
         FOREIGN KEY(title_id) REFERENCES title(id),
@@ -102,7 +102,7 @@ def import_files_csv_to_sqlite():
         id INTEGER PRIMARY KEY,
         review_id INTEGER,
         text TEXT,
-        author TEXT,
+        author INTEGER,
         pub_date TEXT,
         FOREIGN KEY(review_id) REFERENCES review(id),
         FOREIGN KEY(author) REFERENCES user(id))'''
