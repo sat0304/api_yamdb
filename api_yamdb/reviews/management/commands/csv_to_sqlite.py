@@ -8,7 +8,7 @@ def import_files_csv_to_sqlite():
     c = conn.cursor()
     c.execute(
         '''CREATE TABLE IF NOT EXISTS user (
-        id INTEGER PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         username TEXT,
         email TEXT,
         role TEXT,
@@ -88,7 +88,7 @@ def import_files_csv_to_sqlite():
         score INTEGER,
         pub_date TEXT,
         FOREIGN KEY(title_id) REFERENCES title(id),
-        FOREIGN KEY(author) REFERENCES author(id))'''
+        FOREIGN KEY(author) REFERENCES user(id))'''
     )
     with open('../api_yamdb/static/data/review.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
@@ -105,7 +105,7 @@ def import_files_csv_to_sqlite():
         author TEXT,
         pub_date TEXT,
         FOREIGN KEY(review_id) REFERENCES review(id),
-        FOREIGN KEY(author) REFERENCES author(id))'''
+        FOREIGN KEY(author) REFERENCES user(id))'''
     )
     with open('../api_yamdb/static/data/comments.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
