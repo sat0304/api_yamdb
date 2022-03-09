@@ -9,7 +9,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from reviews.models import Category, Genre, Titles
+from reviews.models import Category, Genre, Title
 from .serializers import CategorySerializer, GenreSerializer, TitlesSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -67,7 +67,7 @@ class GenreViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Titles.objects.all()
+    queryset = Title.objects.all()
     serializer_class = TitlesSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -86,7 +86,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
         super(TitlesViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, serializer, *args, **kwargs):
-        instance = Titles.objects.get(pk=self.kwargs.get('pk'))
+        instance = Title.objects.get(pk=self.kwargs.get('pk'))
         try:
             assert self.request.user.role == 'admin'
         except AssertionError:

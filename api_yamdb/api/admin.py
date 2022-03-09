@@ -1,7 +1,7 @@
 from django.contrib import admin
 from api_yamdb import settings
 
-from reviews.models import Category, Genre, Titles
+from reviews.models import Category, Genre, Title
 
 
 @admin.register(Category)
@@ -30,12 +30,4 @@ class GenresAdmin(admin.ModelAdmin):
     empty_value_display = settings.CELL_NULL
 
 
-@admin.register(Titles)
-class TitlesAdmin(admin.ModelAdmin):
-    list_display = ('id',
-                    'category',
-                    'genre',
-                    'name',
-                    'year',
-                    'rating',
-                    'description',)
+

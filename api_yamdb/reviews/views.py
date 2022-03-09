@@ -3,8 +3,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import  Review, Comment
-from api.models import  Title
+from .models import Comment, Review, Title
 from .permissions import ReviewCommentPermissions
 from .serializers import CommentSerializer, ReviewSerializer
 

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework_simplejwt.tokens import RefreshToken
+# from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import User
 
@@ -32,8 +32,8 @@ class TokenSerializer(serializers.ModelSerializer):
         user = get_object_or_404(User,
                                  username=self.initial_data['username']
                                  )
-        refresh = RefreshToken.for_user(user)
-        return str(refresh.access_token)
+        # refresh = AccessToken.for_user(user)
+        return str('refresh.access_token')
 
 
 class UserViewSerializer(serializers.ModelSerializer):

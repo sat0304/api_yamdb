@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from reviews.models import Category, Genre, Titles, GenreTitles
+from reviews.models import Category, Genre, Title, GenreTitles
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -27,14 +27,14 @@ class TitlesSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         if 'genre' not in self.initial_data:
             # То создаём запись о котике без его достижений
-            titles = Titles.objects.create(**validated_data)
+            titles = Title.objects.create(**validated_data)
             return titles
         
         # Уберем список достижений из словаря validated_data и сохраним его
         genres = validated_data.pop('genre')
 
         # Создадим нового котика пока без достижений, данных нам достаточно
-        titles = Titles.objects.create(**validated_data)
+        titles = Title.objects.create(**validated_data)
 
         # Для каждого достижения из списка достижений
         for genre in genres:
@@ -50,5 +50,5 @@ class TitlesSerializer(serializers.ModelSerializer):
 
     
     class Meta:
-        model = Titles
+        model = Title
         fields = ('id', 'name', 'year', 'rating', 'description', 'genre', 'category')

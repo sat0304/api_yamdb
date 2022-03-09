@@ -72,6 +72,19 @@ class Title(models.Model):
         return self.name
 
 
+class GenreTitles(models.Model):
+    genre = models.ForeignKey(Genre,
+                              on_delete=models.PROTECT,
+                              related_name="genre_id",
+                              blank=True,
+                              null=False,
+                              verbose_name='Жанр')
+    titles = models.ForeignKey(Title, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.genre} {self.titles}'
+
+
 class Review(models.Model):
     """Таблица, содержащая отзывы на произведение."""
     SCORES = zip(range(1, 11), range(1, 11))
