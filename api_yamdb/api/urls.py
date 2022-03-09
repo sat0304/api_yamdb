@@ -12,4 +12,6 @@ router_v1.register('titles', TitlesViewSet, basename='name_titles')
 
 urlpatterns = [
     path('v1/', include(router_v1.urls)),
+    path('v1/', include('djoser.urls.jwt')),
+    path('v1/', include('users.urls', namespace='users')),
 ]

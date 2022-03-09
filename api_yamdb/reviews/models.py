@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from users.models import User
 
 CHOICES_CATEGORY = (
     ('Books', 'Книги'),
@@ -25,12 +24,12 @@ class Category(models.Model):
     name = models.CharField('Наименование категории',
                             max_length=256)
     slug = models.SlugField('Уникальный адрес категории',
-                            choices=CHOICES_CATEGORY,
+                            #choices=CHOICES_CATEGORY,
                             max_length=50,
                             unique=True)
 
     def __str__(self):
-        return self.name
+        return self.slug
 
     class Meta:
         verbose_name = "Категории"
@@ -41,7 +40,7 @@ class Genre(models.Model):
     name = models.CharField('Наименование жанра',
                             max_length=256)
     slug = models.SlugField('Уникальный адрес жанра',
-                            choices=CHOICES_GENRE,
+                            #choices=CHOICES_GENRE,
                             max_length=50,
                             unique=True)
 
@@ -51,7 +50,6 @@ class Genre(models.Model):
     class Meta:
         verbose_name = "Жанры"
 
-
 class Titles(models.Model):
     """Произведение."""
     category = models.ForeignKey(Category,
@@ -60,12 +58,14 @@ class Titles(models.Model):
                                  blank=True,
                                  null=False,
                                  verbose_name='Категория')
-    genre = models.ForeignKey(Genre,
+    genre = models.ManyToManyField(Genre,
+                                   through='GenreTitles')
+    """genre = models.ForeignKey(Genre, #ForeignKey
                               on_delete=models.PROTECT,
                               related_name="genre",
                               blank=True,
                               null=False,
-                              verbose_name='Жанр')
+                              verbose_name='Жанр')"""
     name = models.CharField('Название произведения',
                             max_length=256)
     year = models.IntegerField('Год выпуска')
@@ -81,3 +81,15 @@ class Titles(models.Model):
 
     class Meta:
         verbose_name = "Произведения"
+
+class GenreTitles(models.Model):
+    genre = models.ForeignKey(Genre,
+                              on_delete=models.PROTECT,
+                              related_name="genre",
+                              blank=True,
+                              null=False,
+                              verbose_name='Жанр')
+    titles = models.ForeignKey(Titles, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.genre} {self.titles}'

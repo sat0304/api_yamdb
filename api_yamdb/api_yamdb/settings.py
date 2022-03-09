@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta #удалить
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'djoser', #удалить
     'rest_framework_simplejwt',
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
@@ -130,5 +132,12 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 
 }
+#удалить
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+AUTH_USER_MODEL = 'users.User'
 
 CELL_NULL = '-пусто-'
