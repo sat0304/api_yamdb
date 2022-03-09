@@ -28,28 +28,28 @@ class User(AbstractUser):
                               unique=True,
                               help_text='Электронная почта',
                               )
+    role = models.TextField('Роль',
+                            choices=ROLE_CHOICES,
+                            default='user',
+                            help_text='Роль пользователя',
+                            )
+    bio = models.TextField('Биография',
+                           blank=True,
+                           null=True,
+                           help_text='Биография пользователя',
+                           )
     first_name = models.CharField('Имя',
                                   max_length=150,
                                   blank=True,
                                   null=True,
                                   help_text='Имя пользователя',
                                   )
-    last_name = models.CharField('Имя',
+    last_name = models.CharField('Фамилия',
                                  max_length=150,
                                  blank=True,
                                  null=True,
                                  help_text='Фамилия пользователя',
                                  )
-    bio = models.TextField('Биография',
-                           blank=True,
-                           null=True,
-                           help_text='Биография пользователя',
-                           )
-    role = models.TextField('Роль',
-                            choices=ROLE_CHOICES,
-                            default='user',
-                            help_text='Роль пользователя',
-                            )
 
     def __str__(self) -> str:
         return self.username
