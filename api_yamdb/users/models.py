@@ -16,7 +16,7 @@ class User(AbstractUser):
                                 help_text='Ник пользователя',
                                 validators=[
                                     RegexValidator(
-                                        regex=r'^[\w.@+-]+\z',
+                                        regex=r'^[\w.@+-]+',
                                         message=('Ник должен быть '
                                                  + 'комбинацией букв,'
                                                  + 'цифр и символов @.+-_')
