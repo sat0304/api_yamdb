@@ -4,85 +4,103 @@ from django.db.models import Avg
 from users.models import User
 
 
+CHOICES_CATEGORY = (
+    ('Books', 'Книги'),
+    ('Films', 'Фильмы'),
+    ('Music', 'Музыка'),
+)
+
+CHOICES_GENRE= (
+    ('Fairytale', 'Сказка'),
+    ('Rock', 'Рок'),
+    ('ArtHouse', 'Артхаус'),
+    ('Comedy', 'Комедия'),
+    ('Thriller', 'Триллер'),
+    ('Fantasy', 'Фантастика'),
+    ('Classic', 'Классика'),
+    ('Detective', 'Детектив'),
+    ('Horrors', 'Ужасы'),
+    ('Pop', 'Поп'),
+    ('Chanson', 'Шансон'),
+)
+
 class Category(models.Model):
-    """Таблица, содержащая категории произведений."""
-    name = models.CharField(max_length=254)
-    slug = models.SlugField(
-        max_length=50,
-        unique=True
-    )
+    """Категории произведений."""
+    name = models.CharField('Наименование категории',
+                            #choices=CHOICES_CATEGORY,
+                            max_length=256)
+    slug = models.SlugField('Уникальный адрес категории',
+                            max_length=50,
+                            unique=True)
+
+    def __str__(self):
+        return self.slug
 
     class Meta:
-        verbose_name = 'Категория'
-
-    def __str__(self) -> str:
-        return self.name
+        verbose_name = "Категории"
 
 
 class Genre(models.Model):
-    """Таблица, содержащая жанр произведения."""
-    name = models.CharField(max_length=256)
-    slug = models.SlugField(
-        max_length=50,
-        unique=True
-    )
+    """Жанры произведений."""
+    name = models.CharField('Наименование жанра',
+                            #choices=CHOICES_GENRE,
+                            max_length=256)
+    slug = models.SlugField('Уникальный адрес жанра',
+                            max_length=50,
+                            unique=True)
 
-    class Meta:
-        verbose_name = 'Жанр'
-
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Жанры"
 
 class Title(models.Model):
-    """Таблица, содержащая название произведения."""
-    name = models.CharField(
-        max_length=150,
-        verbose_name='Название'
-    )
-    year = models.IntegerField(
-        null=True,
-        blank=True,
-        db_index=True,
-        verbose_name='Год'
-    )
-    description = models.TextField(
-        max_length=200,
-        blank=True
-    )
-    genre = models.ManyToManyField(
-        Genre,
-        related_name='genre'
-    )
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.PROTECT,
-        related_name='categories'
-    )
-    rating = models.IntegerField(
-        null=True,
-        blank=True,
-        verbose_name='Рейтинг'
-    )
+    """Произведение."""
+    category = models.ForeignKey(Category,
+                                 on_delete=models.PROTECT,
+                                 related_name="category",
+                                 blank=True,
+                                 null=False,
+                                 verbose_name='Категория')
+    genre = models.ManyToManyField(Genre,
+                                   verbose_name='Жанр',
+                                   through='GenreTitle')    
+    """genre = models.ForeignKey(Genre, #ForeignKey
+                              on_delete=models.PROTECT,
+                              related_name="genre",
+                              blank=True,
+                              null=False,
+                              verbose_name='Жанр')"""
+    name = models.CharField('Название произведения',
+                            max_length=256,
+                            blank=False)
+    year = models.PositiveIntegerField('Год выпуска',
+                                       db_index=True,)
+    rating = models.IntegerField('Рейтинг поста',
+                              help_text='Введите текст поста')
+    description = models.TextField('Описание произведения',
+                                   blank=True,
+                                   null=True,
+                                   help_text='Введите текст поста')
+
+    def __str__(self):
+        return f'Произведение {self.name}, рейтинг {self.rating}'
 
     class Meta:
-        verbose_name = 'Произведение'
+        verbose_name = "Произведения"
 
-    def __str__(self) -> str:
-        return self.name
-
-
-class GenreTitles(models.Model):
+class GenreTitle(models.Model):
     genre = models.ForeignKey(Genre,
                               on_delete=models.PROTECT,
-                              related_name="genre_id",
+                              related_name="genre",
                               blank=True,
                               null=False,
                               verbose_name='Жанр')
-    titles = models.ForeignKey(Title, on_delete=models.CASCADE)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.genre} {self.titles}'
+        return f'{self.genre} {self.title}'
 
 
 class Review(models.Model):
