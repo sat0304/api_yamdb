@@ -53,7 +53,7 @@ class Genre(models.Model):
     class Meta:
         verbose_name = "Жанры"
 
-class Titles(models.Model):
+class Title(models.Model):
     """Произведение."""
     category = models.ForeignKey(Category,
                                  on_delete=models.PROTECT,
@@ -63,7 +63,7 @@ class Titles(models.Model):
                                  verbose_name='Категория')
     genre = models.ManyToManyField(Genre,
                                    verbose_name='Жанр',
-                                   through='GenreTitles')    
+                                   through='GenreTitle')    
     """genre = models.ForeignKey(Genre, #ForeignKey
                               on_delete=models.PROTECT,
                               related_name="genre",
@@ -88,14 +88,14 @@ class Titles(models.Model):
     class Meta:
         verbose_name = "Произведения"
 
-class GenreTitles(models.Model):
+class GenreTitle(models.Model):
     genre = models.ForeignKey(Genre,
                               on_delete=models.PROTECT,
                               related_name="genre",
                               blank=True,
                               null=False,
                               verbose_name='Жанр')
-    titles = models.ForeignKey(Titles, on_delete=models.CASCADE)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.genre} {self.titles}'
+        return f'{self.genre} {self.title}'

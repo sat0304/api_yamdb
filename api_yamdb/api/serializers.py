@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from reviews.models import Category, Genre, Titles, GenreTitles
+from reviews.models import Category, Genre, Title, GenreTitle
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -32,16 +32,16 @@ class TitlesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if 'genre' not in self.initial_data:
-            titles = Titles.objects.create(**validated_data)
+            titles = Title.objects.create(**validated_data)
             return titles
 
         genres = validated_data.pop('genre')
         titles = Titles.objects.create(**validated_data)
         for genre in genres:
             current_genre, status = Genre.objects.get_or_create(**genre)
-            GenreTitles.objects.create(genre=current_genre, titles=titles)
+            GenreTitle.objects.create(genre=current_genre, titles=titles)
         return titles
 
     class Meta:
-        model = Titles
+        model = Title
         fields = ('id', 'name', 'year', 'rating', 'description', 'genre', 'category')

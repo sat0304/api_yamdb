@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .permissions import IsAdminOrReadOnly
-from reviews.models import Category, Genre, Titles
+from reviews.models import Category, Genre, Title
 from .serializers import CategorySerializer, GenreSerializer, TitlesSerializer
 
 class ModelMixinSet(mixins.ListModelMixin,
@@ -94,8 +94,8 @@ class GenreViewSet(CreateListDeleteMixinSet):
         genre.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)"""
 
-class TitlesViewSet(ModelMixinSet):
-    queryset = Titles.objects.all()
+class TitleViewSet(ModelMixinSet):
+    queryset = Title.objects.all()
     serializer_class = TitlesSerializer
     permission_classes = (IsAdminOrReadOnly,)
     #pagination_class = PageNumberPagination
