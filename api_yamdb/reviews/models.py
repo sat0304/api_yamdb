@@ -6,25 +6,28 @@ CHOICES_CATEGORY = (
     ('Books', 'Книги'),
     ('Films', 'Фильмы'),
     ('Music', 'Музыка'),
-    ('', 'ANY_one'),
-    ('', 'ANY_two'),
 )
 
 CHOICES_GENRE= (
     ('Fairytale', 'Сказка'),
     ('Rock', 'Рок'),
     ('ArtHouse', 'Артхаус'),
-    ('', 'ANY_one'),
-    ('', 'ANY_two'),
+    ('Comedy', 'Комедия'),
+    ('Thriller', 'Триллер'),
+    ('Fantasy', 'Фантастика'),
+    ('Classic', 'Классика'),
+    ('Detective', 'Детектив'),
+    ('Horrors', 'Ужасы'),
+    ('Pop', 'Поп'),
+    ('Chanson', 'Шансон'),
 )
-
 
 class Category(models.Model):
     """Категории произведений."""
     name = models.CharField('Наименование категории',
+                            #choices=CHOICES_CATEGORY,
                             max_length=256)
     slug = models.SlugField('Уникальный адрес категории',
-                            #choices=CHOICES_CATEGORY,
                             max_length=50,
                             unique=True)
 
@@ -38,9 +41,9 @@ class Category(models.Model):
 class Genre(models.Model):
     """Жанры произведений."""
     name = models.CharField('Наименование жанра',
+                            #choices=CHOICES_GENRE,
                             max_length=256)
     slug = models.SlugField('Уникальный адрес жанра',
-                            #choices=CHOICES_GENRE,
                             max_length=50,
                             unique=True)
 
@@ -59,7 +62,8 @@ class Titles(models.Model):
                                  null=False,
                                  verbose_name='Категория')
     genre = models.ManyToManyField(Genre,
-                                   through='GenreTitles')
+                                   verbose_name='Жанр',
+                                   through='GenreTitles')    
     """genre = models.ForeignKey(Genre, #ForeignKey
                               on_delete=models.PROTECT,
                               related_name="genre",
@@ -67,8 +71,10 @@ class Titles(models.Model):
                               null=False,
                               verbose_name='Жанр')"""
     name = models.CharField('Название произведения',
-                            max_length=256)
-    year = models.IntegerField('Год выпуска')
+                            max_length=256,
+                            blank=False)
+    year = models.PositiveIntegerField('Год выпуска',
+                                       db_index=True,)
     rating = models.IntegerField('Рейтинг поста',
                               help_text='Введите текст поста')
     description = models.TextField('Описание произведения',
