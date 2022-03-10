@@ -18,7 +18,7 @@ class GenreSerializer(serializers.ModelSerializer):
         lookup_field = 'slug'
 
 
-class TitlesSerializer(serializers.ModelSerializer):
+class TitleSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(many=False, queryset=Category.objects.all(), slug_field='slug')
     genre = GenreSerializer(many=True)
 
@@ -32,15 +32,15 @@ class TitlesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if 'genre' not in self.initial_data:
-            titles = Title.objects.create(**validated_data)
-            return titles
+            title = Title.objects.create(**validated_data)
+            return title
 
         genres = validated_data.pop('genre')
-        titles = Titles.objects.create(**validated_data)
+        title = Title.objects.create(**validated_data)
         for genre in genres:
             current_genre, status = Genre.objects.get_or_create(**genre)
-            GenreTitle.objects.create(genre=current_genre, titles=titles)
-        return titles
+            GenreTitle.objects.create(genre=current_genre, title=title)
+        return title
 
     class Meta:
         model = Title
