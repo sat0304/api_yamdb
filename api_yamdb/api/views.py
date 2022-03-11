@@ -1,14 +1,18 @@
-from django.core.exceptions import PermissionDenied
-from rest_framework import status, viewsets
-from rest_framework.response import Response
-from rest_framework import filters, permissions, status, viewsets, mixins
-from rest_framework.filters import SearchFilter
-from rest_framework.decorators import action
+from django.db.models import Avg
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .permissions import OwnerOrReadOnly
+
+from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
+from .serializers import (
+    CategorySerializer, 
+    GenreSerializer, 
+    TitleReadSerializer,
+    TitleWriteSerializer)
 from reviews.models import Category, Genre, Title
-from .serializers import CategorySerializer, GenreSerializer, TitleSerializer
+
 
 class ModelMixinSet(mixins.ListModelMixin,
                     mixins.RetrieveModelMixin,
@@ -16,6 +20,7 @@ class ModelMixinSet(mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
     pass
+
 
 class CreateListDeleteMixinSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
@@ -27,45 +32,51 @@ class CreateListDeleteMixinSet(mixins.CreateModelMixin,
 class CategoryViewSet(CreateListDeleteMixinSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
+    pagination_class = PageNumberPagination
     search_fields = ('=name',)
     lookup_field = 'slug'
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return (AdminOrSuperuser(),)
+        if self.action == 'destroy':
+            return (AdminOrSuperuser(),)
+        return super().get_permissions()
 
 
 class GenreViewSet(CreateListDeleteMixinSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = PageNumberPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=name',)
     lookup_field = 'slug'
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return (AdminOrSuperuser(),)
+        if self.action == 'destroy':
+            return (AdminOrSuperuser(),)
+        return super().get_permissions()
+
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    serializer_class = TitleSerializer
+    queryset = Title.objects.all().annotate(Avg('reviews__score'))
     permission_classes = (permissions.AllowAny,)
+    pagination_class = PageNumberPagination
+    filter_backends = [DjangoFilterBackend]
 
-    def perform_create(self, serializer):
-        try:
-            assert self.request.user.role == 'admin'
-        except AssertionError:
-            raise PermissionDenied('Только Администратор может создавать произведение!')
-        serializer.save()
-
-    def perform_update(self, serializer):
-        try:
-            assert self.request.user.role == 'admin'
-        except AssertionError:
-            raise PermissionDenied('Удаление чужого контента запрещено!')
-        super(TitleViewSet, self).perform_update(serializer)
-
-    def perform_destroy(self, serializer, *args, **kwargs):
-        instance = Title.objects.get(pk=self.kwargs.get('pk'))
-        try:
-            assert self.request.user.role == 'admin'
-        except AssertionError:
-            raise PermissionDenied('Удаление чужого контента запрещено!')
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return TitleReadSerializer
+        return TitleWriteSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return (AdminOrSuperuser(),)
+        if self.action == 'destroy':
+            return (AdminOrSuperuser(),)
+        return super().get_permissions()

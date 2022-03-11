@@ -59,13 +59,16 @@ def import_files_csv_to_sqlite():
         "name" TEXT,
         "year" INTEGER,
         "category_id" INTEGER,
+        "rating" INTEGER,
+        "genre_id" INTEGER,
+        "description" TEXT,
         FOREIGN KEY("category_id") REFERENCES "category"("id"))'''
     )
     with open('../api_yamdb/static/data/titles.csv', 'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv, delimiter=",")
         first_row = next(rows)
         for row in rows:
-            c.execute('INSERT OR IGNORE INTO "title" VALUES (?, ?, ?, ?)', row)       
+            c.execute('INSERT OR IGNORE INTO "title" VALUES (?, ?, ?, ?, ?, ?, ?)', row)       
     conn.commit()
     '''Создание связанной таблицы GENRE_TITLE.'''
     c = conn.cursor()

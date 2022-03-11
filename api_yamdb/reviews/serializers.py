@@ -1,9 +1,6 @@
-# from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from .models import Comment, Review
-# from .models import Category, Genre, Title
-# from users.models import User
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -14,7 +11,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        fields = ('id', 'text', 'author', 'score', 'pub_date')
+        fields = ('title', 'text', 'author', 'score', 'pub_date')
         model = Review
         
     def validate(self, data):
@@ -40,5 +37,5 @@ class CommentSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        fields = ('id', 'text', 'author', 'pub_date',)
+        fields = ('review', 'text', 'author', 'pub_date',)
         model = Comment

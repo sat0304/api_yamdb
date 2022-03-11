@@ -37,6 +37,7 @@ class Category(models.Model):
         return self.slug
 
     class Meta:
+        ordering = ('name', )
         verbose_name = "Категории"
 
 
@@ -53,7 +54,9 @@ class Genre(models.Model):
         return self.name
 
     class Meta:
+        ordering = ('name', )
         verbose_name = "Жанры"
+ 
 
 class Title(models.Model):
     """Произведение."""
@@ -78,7 +81,10 @@ class Title(models.Model):
     year = models.PositiveIntegerField('Год выпуска',
                                        db_index=True,)
     rating = models.IntegerField('Рейтинг поста',
-                              help_text='Введите текст поста')
+                                blank=True,
+                                null=True,
+                                help_text='Введите текст поста',
+                                )
     description = models.TextField('Описание произведения',
                                    blank=True,
                                    null=True,
@@ -88,6 +94,7 @@ class Title(models.Model):
         return f'Произведение {self.name}, рейтинг {self.rating}'
 
     class Meta:
+        ordering = ('-year', )
         verbose_name = "Произведения"
 
 class GenreTitle(models.Model):
@@ -101,6 +108,10 @@ class GenreTitle(models.Model):
 
     def __str__(self):
         return f'{self.genre} {self.title}'
+
+    class Meta:
+        ordering = ('title', )
+        verbose_name = "Жанры_произведений"
 
 
 class Review(models.Model):
