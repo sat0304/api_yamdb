@@ -14,12 +14,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [ReviewCommentPermissions, IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        title = get_object_or_404(Title, pk=self.kwargs.get('title'))
-        return Review.objects.filter(title=title)
+        title_1 = get_object_or_404(Title, pk=self.kwargs.get('title'))
+        return Review.objects.filter(title=title_1)
 
     def perform_create(self, serializer):
-        title = get_object_or_404(Title, pk=self.kwargs.get('title'))
-        serializer.save(author=self.request.user, title=title)
+        title_2 = get_object_or_404(Title, pk=self.kwargs.get('title'))
+        serializer.save(author=self.request.user, title=title_2)
 
 
 class CommentViewSet(viewsets.ModelViewSet):

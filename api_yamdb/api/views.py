@@ -1,9 +1,7 @@
-from django.db.models import Avg
+from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
-
 
 from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
 from .serializers import (
@@ -64,7 +62,7 @@ class GenreViewSet(CreateListDeleteMixinSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().annotate(Avg('reviews__score'))
+    queryset = Title.objects.all()
     permission_classes = (permissions.AllowAny,)
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend]
