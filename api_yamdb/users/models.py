@@ -2,11 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
-ROLE_CHOICES = (
-    ('user', 'user'),
-    ('moderator', 'moderator'),
-    ('admin', 'admin'),
-)
+from api_yamdb.settings import ROLE_CHOICES
 
 
 class User(AbstractUser):
@@ -61,6 +57,9 @@ class User(AbstractUser):
                             default='user',
                             help_text='Роль пользователя',
                             )
+
+    class Meta:
+        ordering = ('username',)
 
     def __str__(self) -> str:
         return self.username
