@@ -2,11 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
-ROLE_CHOICES = (
-    ('user', 'user'),
-    ('moderator', 'moderator'),
-    ('admin', 'admin'),
-)
+from api_yamdb.settings import ROLE_CHOICES
 
 
 class User(AbstractUser):
@@ -23,18 +19,29 @@ class User(AbstractUser):
                                     )
                                 ]
                                 )
+    password = models.CharField('Пароль',
+                                max_length=128,
+                                blank=True,
+                                null=True,
+                                help_text='Пароль')
     email = models.EmailField('e-mail',
                               max_length=254,
                               unique=True,
                               help_text='Электронная почта',
                               )
+    confirmation_code = models.CharField('Код',
+                                         blank=True,
+                                         null=True,
+                                         max_length=9,
+                                         help_text='Код подтверждения'
+                                         )
     first_name = models.CharField('Имя',
                                   max_length=150,
                                   blank=True,
                                   null=True,
                                   help_text='Имя пользователя',
                                   )
-    last_name = models.CharField('Имя',
+    last_name = models.CharField('Фамилия',
                                  max_length=150,
                                  blank=True,
                                  null=True,
@@ -50,6 +57,9 @@ class User(AbstractUser):
                             default='user',
                             help_text='Роль пользователя',
                             )
+
+    class Meta:
+        ordering = ('username',)
 
     def __str__(self) -> str:
         return self.username
