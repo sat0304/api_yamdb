@@ -53,6 +53,7 @@ class GenreViewSet(CreateListDeleteMixinSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=name',)
     lookup_field = 'slug'
+    filter_class = GenreFilter
 
     def get_permissions(self):
         if self.action == 'create':
@@ -67,7 +68,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_class = (TitleFilter)
+    filter_class = TitleFilter
     filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 
     def get_serializer_class(self):

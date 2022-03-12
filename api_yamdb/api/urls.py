@@ -12,7 +12,7 @@ router_v1.register('titles', TitleViewSet, basename='titles')
 
 urlpatterns = [
     path(
-        'v1/titles/(<int:title_id>/',
+        'v1/titles/',
         include('reviews.urls', namespace='reviews')
     ),
     path('v1/', include('users.urls', namespace='users')),

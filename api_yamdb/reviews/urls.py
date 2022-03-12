@@ -6,8 +6,10 @@ from .views import CommentViewSet, ReviewViewSet
 app_name = 'reviews'
 
 router_v1 = routers.DefaultRouter()
-router_v1.register('reviews', ReviewViewSet, basename='reviews')
-# router_v1.register('comments', CommentViewSet, basename='comments_list')
+router_v1.register(
+    r'(?P<title_id>\d+)/reviews',
+    ReviewViewSet, basename='reviews'
+)
 router_v1.register(
     r'reviews/(?P<review_id>\d+)/comments',
     CommentViewSet,
