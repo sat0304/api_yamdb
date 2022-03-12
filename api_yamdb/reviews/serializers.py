@@ -13,7 +13,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('title', 'text', 'author', 'score', 'pub_date')
         model = Review
-   
+
     def validate(self, data):
         super().validate(data)
         if self.context['request'].method != 'POST':
