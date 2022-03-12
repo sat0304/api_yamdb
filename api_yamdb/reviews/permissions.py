@@ -8,7 +8,7 @@ class IsAdminOrSuperUser(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        if request.user.is_staff or request.user.role == User.admin:
+        if request.user.is_staff or request.user.role == 'admin':
             return True
 
 
@@ -28,8 +28,8 @@ class ReviewCommentPermissions(permissions.BasePermission):
 
         if request.method in ('PATCH', 'DELETE'):
             return (request.user == obj.author or
-                    + request.user.role == User.admin or
-                    + request.user.role == User.moderator)
+                    + request.user.role == 'admin' or
+                    + request.user.role == 'moderator')
         if request.method in permissions.SAFE_METHODS:
             return True
         return False
