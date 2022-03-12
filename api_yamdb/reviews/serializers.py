@@ -13,7 +13,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('title', 'text', 'author', 'score', 'pub_date')
         model = Review
-        
+   
     def validate(self, data):
         super().validate(data)
         if self.context['request'].method != 'POST':
@@ -24,7 +24,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         )
         if Review.objects.filter(author=user, title__id=title_id).exists():
             raise serializers.ValidationError(
-                "Можно оставить лишь один отзыв на данное произведение"
+                'Можно оставить лишь один отзыв на данное произведение'
             )
         return data
 

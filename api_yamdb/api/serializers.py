@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 
-from reviews.models import Category, Genre, GenreTitle, Title
+from reviews.models import Category, Genre, Title
 from users.models import User
 
 

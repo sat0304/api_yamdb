@@ -1,12 +1,11 @@
-from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.pagination import PageNumberPagination
 
 from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
 from .serializers import (
-    CategorySerializer, 
-    GenreSerializer, 
+    CategorySerializer,
+    GenreSerializer,
     TitleReadSerializer,
     TitleWriteSerializer)
 from reviews.models import Category, Genre, Title
