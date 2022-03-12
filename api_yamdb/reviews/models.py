@@ -81,7 +81,6 @@ class Title(models.Model):
     year = models.PositiveIntegerField('Год выпуска',
                                        db_index=True,)
     rating = models.IntegerField('Рейтинг поста',
-                                blank=True,
                                 null=True,
                                 help_text='Введите текст поста',
                                 )
@@ -110,7 +109,7 @@ class GenreTitle(models.Model):
         return f'{self.genre} {self.title}'
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('genre', )
         verbose_name = "Жанры_произведений"
 
 

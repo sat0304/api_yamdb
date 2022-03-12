@@ -10,6 +10,7 @@ from .serializers import (
     TitleReadSerializer,
     TitleWriteSerializer)
 from reviews.models import Category, Genre, Title
+from .filters import GenreFilter, TitleFilter
 
 
 class ModelMixinSet(mixins.ListModelMixin,
@@ -65,16 +66,19 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = (permissions.AllowAny,)
     pagination_class = PageNumberPagination
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = (GenreFilter, TitleFilter)
+    filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
             return TitleReadSerializer
         return TitleWriteSerializer
-    
+
     def get_permissions(self):
-        if self.action == 'create':
-            return (AdminOrSuperuser(),)
-        if self.action == 'destroy':
+        if self.action in ('create', 'destroy'):
             return (AdminOrSuperuser(),)
         return super().get_permissions()
+
+    def perform_create(self, serializer):
+        serializer.save(rating=None)
