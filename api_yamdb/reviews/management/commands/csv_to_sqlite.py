@@ -18,8 +18,8 @@ def import_files_csv_to_sqlite():
         "last_name" TEXT)"""
     )
     with open(
-        '../api_yamdb/static/data/users.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/users.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -36,8 +36,8 @@ def import_files_csv_to_sqlite():
         "slug" TEXT)"""
     )
     with open(
-        '../api_yamdb/static/data/category.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/category.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -53,8 +53,8 @@ def import_files_csv_to_sqlite():
         "slug" TEXT)"""
     )
     with open(
-        '../api_yamdb/static/data/genre.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/genre.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -75,8 +75,8 @@ def import_files_csv_to_sqlite():
         FOREIGN KEY("category_id") REFERENCES "category"("id"))"""
     )
     with open(
-        '../api_yamdb/static/data/titles.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/titles.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -95,8 +95,8 @@ def import_files_csv_to_sqlite():
         FOREIGN KEY("genre_id") REFERENCES "genre"("id"))"""
     )
     with open(
-        '../api_yamdb/static/data/genre_title.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/genre_title.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -117,8 +117,8 @@ def import_files_csv_to_sqlite():
         FOREIGN KEY("author") REFERENCES "user"("id"))"""
     )
     with open(
-        '../api_yamdb/static/data/review.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/review.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         for row in rows:
@@ -139,8 +139,8 @@ def import_files_csv_to_sqlite():
         FOREIGN KEY("author") REFERENCES "user"("id"))"""
     )
     with open(
-        '../api_yamdb/static/data/comments.csv',
-        'r', encoding='utf-8') as f_open_csv:
+            '../api_yamdb/static/data/comments.csv',
+            'r', encoding='utf-8') as f_open_csv:
         rows = csv.reader(f_open_csv)
         first_row = next(rows)
         print(first_row)
