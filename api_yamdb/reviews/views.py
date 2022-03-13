@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 
 from .models import Comment, Review, Title
@@ -9,6 +10,7 @@ from .serializers import CommentSerializer, ReviewSerializer
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = (CelestialOrMud,)
+    pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
         title_id = self.kwargs.get('title_id')
@@ -25,6 +27,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (
         CelestialOrMud,
     )
+    pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
         review_id = self.kwargs.get('review_id')
