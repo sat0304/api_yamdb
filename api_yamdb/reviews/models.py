@@ -37,7 +37,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('name', )
-        verbose_name = 'Категории'
+        verbose_name = "Категории"
 
 
 class Genre(models.Model):
@@ -54,20 +54,26 @@ class Genre(models.Model):
 
     class Meta:
         ordering = ('name', )
-        verbose_name = 'Жанры'
+        verbose_name = "Жанры"
 
 
 class Title(models.Model):
     """Произведение."""
     category = models.ForeignKey(Category,
                                  on_delete=models.PROTECT,
-                                 related_name='category',
+                                 related_name="category",
                                  blank=True,
                                  null=False,
                                  verbose_name='Категория')
     genre = models.ManyToManyField(Genre,
                                    verbose_name='Жанр',
                                    through='GenreTitle')
+    """genre = models.ForeignKey(Genre, #ForeignKey
+                              on_delete=models.PROTECT,
+                              related_name="genre",
+                              blank=True,
+                              null=False,
+                              verbose_name='Жанр')"""
     name = models.CharField('Название произведения',
                             max_length=256,
                             blank=False)
@@ -87,14 +93,13 @@ class Title(models.Model):
 
     class Meta:
         ordering = ('-year', )
-        verbose_name = 'Произведения'
-
+        verbose_name = "Произведения"
 
 
 class GenreTitle(models.Model):
     genre = models.ForeignKey(Genre,
                               on_delete=models.PROTECT,
-                              related_name='genre',
+                              related_name="genre",
                               blank=True,
                               null=False,
                               verbose_name='Жанр')
@@ -105,7 +110,7 @@ class GenreTitle(models.Model):
 
     class Meta:
         ordering = ('genre', )
-        verbose_name = 'Жанры_произведений'
+        verbose_name = "Жанры_произведений"
 
 
 class Review(models.Model):
