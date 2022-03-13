@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models import Avg
-
 from users.models import User
-
 
 CHOICES_CATEGORY = (
     ('Books', 'Книги'),
@@ -10,7 +8,7 @@ CHOICES_CATEGORY = (
     ('Music', 'Музыка'),
 )
 
-CHOICES_GENRE= (
+CHOICES_GENRE = (
     ('Fairytale', 'Сказка'),
     ('Rock', 'Рок'),
     ('ArtHouse', 'Артхаус'),
@@ -24,10 +22,11 @@ CHOICES_GENRE= (
     ('Chanson', 'Шансон'),
 )
 
+
 class Category(models.Model):
     """Категории произведений."""
     name = models.CharField('Наименование категории',
-                            #choices=CHOICES_CATEGORY,
+                            # choices=CHOICES_CATEGORY,
                             max_length=256)
     slug = models.SlugField('Уникальный адрес категории',
                             max_length=50,
@@ -44,7 +43,7 @@ class Category(models.Model):
 class Genre(models.Model):
     """Жанры произведений."""
     name = models.CharField('Наименование жанра',
-                            #choices=CHOICES_GENRE,
+                            # choices=CHOICES_GENRE,
                             max_length=256)
     slug = models.SlugField('Уникальный адрес жанра',
                             max_length=50,
@@ -56,7 +55,7 @@ class Genre(models.Model):
     class Meta:
         ordering = ('name', )
         verbose_name = "Жанры"
- 
+
 
 class Title(models.Model):
     """Произведение."""
@@ -68,7 +67,7 @@ class Title(models.Model):
                                  verbose_name='Категория')
     genre = models.ManyToManyField(Genre,
                                    verbose_name='Жанр',
-                                   through='GenreTitle')    
+                                   through='GenreTitle')
     """genre = models.ForeignKey(Genre, #ForeignKey
                               on_delete=models.PROTECT,
                               related_name="genre",
@@ -81,9 +80,9 @@ class Title(models.Model):
     year = models.PositiveIntegerField('Год выпуска',
                                        db_index=True,)
     rating = models.IntegerField('Рейтинг поста',
-                                null=True,
-                                help_text='Введите текст поста',
-                                )
+                                 null=True,
+                                 help_text='Введите текст поста',
+                                 )
     description = models.TextField('Описание произведения',
                                    blank=True,
                                    null=True,
@@ -95,6 +94,7 @@ class Title(models.Model):
     class Meta:
         ordering = ('-year', )
         verbose_name = "Произведения"
+
 
 class GenreTitle(models.Model):
     genre = models.ForeignKey(Genre,
@@ -114,33 +114,34 @@ class GenreTitle(models.Model):
 
 
 class Review(models.Model):
-    """Таблица, содержащая отзывы на произведение."""
-    SCORES = zip(range(1, 11), range(1, 11))
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
-        related_name='reviews',
-        verbose_name='Произведение',
+        related_name='reviews'
     )
-    text = models.TextField(verbose_name='Текст отзыва')
+    text = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='reviews',
-        verbose_name='Автор',
+        related_name='reviews'
     )
-    score = models.IntegerField(choices=SCORES, default=1)
+    score = models.PositiveIntegerField()
     pub_date = models.DateTimeField(
-        verbose_name='Дата публикации отзыва',
+        'Дата добавления',
         auto_now_add=True,
+        db_index=True
     )
+
+    def __str__(self):
+        return self.text
 
     class Meta:
-        ordering = ('-pub_date', )
-        verbose_name = 'Жанр'
-
-    def __str__(self) -> str:
-        return self.text
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'title_id'],
+                name='unique_review'
+            )
+        ]
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -152,28 +153,22 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    """Таблица, содержащая комментарии к отзывам на произведение."""
-    review = models.ForeignKey(
+    review_id = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    text = models.TextField()
+    text = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='comments',
-        verbose_name='Автор'
+        related_name='comments'
     )
     pub_date = models.DateTimeField(
-        verbose_name='Дата публикации комментария',
-        auto_now_add=True
+        'Дата добавления',
+        auto_now_add=True,
+        db_index=True
     )
 
-    class Meta:
-        ordering = ('-pub_date', )
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
-
-    def __str__(self) -> str:
+    def __str__(self):
         return self.text
