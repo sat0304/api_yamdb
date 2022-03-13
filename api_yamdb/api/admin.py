@@ -29,4 +29,5 @@ class GenresAdmin(admin.ModelAdmin):
     list_filter = ('slug',)
     empty_value_display = settings.CELL_NULL
 
+
 admin.site.register(Title)

@@ -1,12 +1,11 @@
-from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.pagination import PageNumberPagination
 
 from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
 from .serializers import (
-    CategorySerializer, 
-    GenreSerializer, 
+    CategorySerializer,
+    GenreSerializer,
     TitleReadSerializer,
     TitleWriteSerializer)
 from reviews.models import Category, Genre, Title
@@ -53,6 +52,7 @@ class GenreViewSet(CreateListDeleteMixinSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=name',)
     lookup_field = 'slug'
+    filter_class = GenreFilter
 
     def get_permissions(self):
         if self.action == 'create':
@@ -67,7 +67,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_class = (TitleFilter)
+    filter_class = TitleFilter
     filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
 
     def get_serializer_class(self):
