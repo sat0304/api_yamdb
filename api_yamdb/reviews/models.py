@@ -81,7 +81,6 @@ class Title(models.Model):
                                        db_index=True,)
     rating = models.IntegerField('Рейтинг поста',
                                  null=True,
-
                                  help_text='Введите текст поста',
                                  )
     description = models.TextField('Описание произведения',
