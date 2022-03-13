@@ -68,12 +68,6 @@ class Title(models.Model):
     genre = models.ManyToManyField(Genre,
                                    verbose_name='Жанр',
                                    through='GenreTitle')
-    """genre = models.ForeignKey(Genre, #ForeignKey
-                              on_delete=models.PROTECT,
-                              related_name="genre",
-                              blank=True,
-                              null=False,
-                              verbose_name='Жанр')."""
     name = models.CharField('Название произведения',
                             max_length=256,
                             blank=False)
