@@ -1,36 +1,36 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Comment, Review, Title
-from .permissions import ReviewCommentPermissions
+from .permissions import CelestialOrMud
 from .serializers import CommentSerializer, ReviewSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    pagination_class = PageNumberPagination
-    permission_classes = [ReviewCommentPermissions, IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        title_1 = get_object_or_404(Title, pk=self.kwargs.get('title'))
-        return Review.objects.filter(title=title_1)
+    permission_classes = (CelestialOrMud,)
 
     def perform_create(self, serializer):
-        title_2 = get_object_or_404(Title, pk=self.kwargs.get('title'))
-        serializer.save(author=self.request.user, title=title_2)
+        title_id = self.kwargs.get('title_id')
+        title = get_object_or_404(Title, id=title_id)
+        serializer.save(author=self.request.user, title=title)
+
+    def get_queryset(self):
+        title_id = self.kwargs.get('title_id')
+        return Review.objects.filter(title=title_id).order_by('id')
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    pagination_class = PageNumberPagination
-    permission_classes = [ReviewCommentPermissions, IsAuthenticatedOrReadOnly]
+    permission_classes = (
+        CelestialOrMud,
+    )
 
     def perform_create(self, serializer):
-        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
-        serializer.save(author=self.request.user, review=review)
+        review_id = self.kwargs.get('review_id')
+        review = get_object_or_404(Review, id=review_id)
+        serializer.save(author=self.request.user, review_id=review)
 
     def get_queryset(self):
-        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
-        return Comment.objects.filter(review=review)
+        review = self.kwargs.get('review_id')
+        return Comment.objects.filter(review_id=review).order_by('id')
