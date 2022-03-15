@@ -1,3 +1,6 @@
+import datetime
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Avg
 from users.models import User
@@ -22,6 +25,14 @@ CHOICES_GENRE = (
     ('Chanson', 'Шансон'),
 )
 
+def movie_year_validator(value):
+    """Функция проверки года выпуска фильма."""
+    if value < 1896 or value > datetime.datetime.now().year:
+        raise ValidationError(
+            _('%(value)s is not a correcrt year!'),
+            params={'value': value},
+    )
+
 
 class Category(models.Model):
     """Категории произведений."""
@@ -33,12 +44,12 @@ class Category(models.Model):
         max_length=50,
         unique=True)
 
-    def __str__(self):
-        return self.slug
-
     class Meta:
         ordering = ('name', )
         verbose_name = 'Категории'
+
+    def __str__(self) -> str:
+        return self.slug
 
 
 class Genre(models.Model):
@@ -51,12 +62,12 @@ class Genre(models.Model):
         max_length=50,
         unique=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ('name', )
         verbose_name = 'Жанры'
+   
+    def __str__(self) -> str:
+        return self.name
 
 
 class Title(models.Model):
@@ -78,7 +89,8 @@ class Title(models.Model):
         blank=False)
     year = models.PositiveIntegerField(
         'Год выпуска',
-        db_index=True,)
+        db_index=True,
+        validators=(movie_year_validator,))
     rating = models.IntegerField(
         'Рейтинг поста',
         null=True,
@@ -86,18 +98,18 @@ class Title(models.Model):
     description = models.TextField(
         'Описание произведения',
         blank=True,
-        null=True,
         help_text='Введите текст поста')
-
-    def __str__(self):
-        return f'Произведение {self.name}, рейтинг {self.rating}'
 
     class Meta:
         ordering = ('-year', )
         verbose_name = 'Произведения'
 
+    def __str__(self) -> str:
+        return f'Произведение {self.name}, рейтинг {self.rating}'
+
 
 class GenreTitle(models.Model):
+    """Связанная таблица жанров и произведений."""
     genre = models.ForeignKey(
         Genre,
         on_delete=models.PROTECT,
@@ -109,21 +121,22 @@ class GenreTitle(models.Model):
         Title,
         on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.genre} {self.title}'
-
     class Meta:
         ordering = ('genre', )
         verbose_name = 'Жанры_произведений'
 
+    def __str__(self) -> str:
+        return f'{self.genre} {self.title}'
+
 
 class Review(models.Model):
+    """Таблица отзывов на произведение."""
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
         related_name='reviews'
     )
-    text = models.TextField(null=True, blank=True)
+    text = models.TextField(blank=True)
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -136,16 +149,17 @@ class Review(models.Model):
         db_index=True
     )
 
-    def __str__(self):
-        return self.text
-
     class Meta:
+        ordering = ('-pub_date', )
         constraints = [
             models.UniqueConstraint(
-                fields=['author', 'title_id'],
+                fields=('author', 'title_id',),
                 name='unique_review'
             )
         ]
+
+    def __str__(self) -> str:
+        return self.text
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -157,6 +171,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
+    """Таблица комментариев на отзывы к произведениям."""
     review_id = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
@@ -174,5 +189,9 @@ class Comment(models.Model):
         db_index=True
     )
 
-    def __str__(self):
+    class Meta:
+        ordering = ('-pub_date', )
+        verbose_name = 'Комментарии_произведений'
+
+    def __str__(self) -> str:
         return self.text
