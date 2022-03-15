@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Comment, Review, Title
 from .permissions import CelestialOrMud

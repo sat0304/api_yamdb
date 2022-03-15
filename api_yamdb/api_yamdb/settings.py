@@ -1,5 +1,4 @@
 import os
-
 from datetime import timedelta
 
 from dotenv import load_dotenv
@@ -14,10 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = os.environ.get('SERVER_NAMES').split()
 
 
 INSTALLED_APPS = [

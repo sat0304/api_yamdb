@@ -3,6 +3,7 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Avg
+
 from users.models import User
 
 CHOICES_CATEGORY = (

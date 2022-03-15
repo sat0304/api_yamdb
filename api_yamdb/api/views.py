@@ -1,15 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import PageNumberPagination
-from reviews.models import Category, Genre, Title
 
 from .filters import GenreFilter, TitleFilter
 from .mixins import CreateListDeleteMixinSet
 from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
-from .serializers import (
-    CategorySerializer, GenreSerializer, TitleReadSerializer,
-    TitleWriteSerializer,
-)
+from .serializers import (CategorySerializer, GenreSerializer,
+                          TitleReadSerializer, TitleWriteSerializer)
+from reviews.models import Category, Genre, Title
 
 
 class CategoryViewSet(CreateListDeleteMixinSet):
