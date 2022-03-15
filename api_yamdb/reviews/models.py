@@ -29,10 +29,7 @@ CHOICES_GENRE = (
 def movie_year_validator(value):
     """Функция проверки года выпуска фильма."""
     if value < 1896 or value > datetime.datetime.now().year:
-        raise ValidationError(
-            (f'%{value}s is not a correcrt year!'),
-            params={'value': value},
-    )
+        raise ValidationError(f'%{value}s неправильный год!')
 
 
 class Category(models.Model):
