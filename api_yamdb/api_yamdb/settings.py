@@ -1,19 +1,24 @@
 import os
+
 from datetime import timedelta
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-ALLOWED_HOSTS = ['*']
+DEBUG = False
 
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,8 +65,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
 
-# Database
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,8 +72,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -87,7 +88,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 
 LANGUAGE_CODE = 'ru-ru'
 
@@ -99,8 +99,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
 
@@ -120,14 +118,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'PAGE_SIZE': 5,
-    # 'DEFAULT_THROTTLE_CLASSES': [
-    #     'rest_framework.throttling.UserRateThrottle',
-    #     'rest_framework.throttling.AnonRateThrottle',
-    # ],
-    # 'DEFAULT_THROTTLE_RATES': {
-    #     'user': '10000/day',
-    #     'anon': '1000/day',
-    # }
 }
 
 SIMPLE_JWT = {

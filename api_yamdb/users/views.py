@@ -63,9 +63,10 @@ class SignupViewSet(mixins.CreateModelMixin, GenericViewSet):
 def TokenView(request):
     serializer = TokenSerializer(data=request.data)
     if serializer.is_valid():
-        user = get_object_or_404(User,
-                                 username=request.data.get('username')
-                                 )
+        user = get_object_or_404(
+            User,
+            username=request.data.get('username')
+        )
         c_code = user.confirmation_code
         if request.data['confirmation_code'] == c_code:
             return Response(serializer.data, status=status.HTTP_201_CREATED)

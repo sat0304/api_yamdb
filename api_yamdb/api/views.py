@@ -1,30 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, permissions, viewsets
+from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import PageNumberPagination
+from reviews.models import Category, Genre, Title
 
+from .filters import GenreFilter, TitleFilter
+from .mixins import CreateListDeleteMixinSet
 from .permissions import AdminOrSuperuser, IsAuthenticatedOrReadOnly
 from .serializers import (
-    CategorySerializer,
-    GenreSerializer,
-    TitleReadSerializer,
-    TitleWriteSerializer)
-from reviews.models import Category, Genre, Title
-from .filters import GenreFilter, TitleFilter
-
-
-class ModelMixinSet(mixins.ListModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.CreateModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
-    pass
-
-
-class CreateListDeleteMixinSet(mixins.CreateModelMixin,
-                               mixins.ListModelMixin,
-                               mixins.DestroyModelMixin,
-                               viewsets.GenericViewSet):
-    pass
+    CategorySerializer, GenreSerializer, TitleReadSerializer,
+    TitleWriteSerializer,
+)
 
 
 class CategoryViewSet(CreateListDeleteMixinSet):
@@ -68,15 +53,26 @@ class TitleViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filter_class = TitleFilter
-    filterset_fields = ('category__slug', 'genre__slug', 'name', 'year')
+    filterset_fields = (
+        'category__slug',
+        'genre__slug',
+        'name',
+        'year')
 
     def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
+        if self.action in (
+            'list',
+            'retrieve'
+        ):
             return TitleReadSerializer
         return TitleWriteSerializer
 
     def get_permissions(self):
-        if self.action in ('create', 'destroy', 'partial_update'):
+        if self.action in (
+            'create',
+            'destroy',
+            'partial_update'
+        ):
             return (AdminOrSuperuser(),)
         return super().get_permissions()
 

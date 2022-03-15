@@ -12,7 +12,9 @@ class SignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', )
+        fields = (
+            'username',
+            'email', )
         read_only_fields = ('confirmation_code',)
 
     def validate(self, attrs):
@@ -29,13 +31,16 @@ class TokenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'confirmation_code', 'token')
-        # read_only_fields = ('username', 'confirmation_code')
+        fields = (
+            'username',
+            'confirmation_code',
+            'token')
 
     def get_token(self, obj):
-        user = get_object_or_404(User,
-                                 username=self.initial_data.get('username')
-                                 )
+        user = get_object_or_404(
+            User,
+            username=self.initial_data.get('username')
+        )
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
@@ -50,8 +55,14 @@ class UsersViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name',
-                  'last_name', 'bio', 'role')
+        fields = (
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role'
+        )
         lookup_field = 'username'
 
     def validate(self, attrs):
