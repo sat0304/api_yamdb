@@ -25,11 +25,12 @@ CHOICES_GENRE = (
     ('Chanson', 'Шансон'),
 )
 
+
 def movie_year_validator(value):
     """Функция проверки года выпуска фильма."""
     if value < 1896 or value > datetime.datetime.now().year:
         raise ValidationError(
-            _('%(value)s is not a correcrt year!'),
+            (f'%{value}s is not a correcrt year!'),
             params={'value': value},
     )
 
@@ -65,7 +66,7 @@ class Genre(models.Model):
     class Meta:
         ordering = ('name', )
         verbose_name = 'Жанры'
-   
+
     def __str__(self) -> str:
         return self.name
 
