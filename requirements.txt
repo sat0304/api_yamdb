@@ -9,7 +9,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 cryptography==50.0.0
 defusedxml==0.7.1
-Django==5.2.16
+Django==5.2.17
 django-filter==21.1
 django-templated-mail==1.1.1
 djangorestframework==3.17.2
@@ -58,7 +58,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 cryptography==50.0.0
 defusedxml==0.7.1
-Django==5.2.16
+Django==5.2.17
 django-filter==21.1
 django-templated-mail==1.1.1
 djangorestframework==3.17.2
