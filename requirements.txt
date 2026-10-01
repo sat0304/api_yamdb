@@ -23,7 +23,7 @@ itypes==1.2.0
 Jinja2==3.0.3
 MarkupSafe==2.1.0
 mccabe==0.6.1
-oauthlib==3.2.0
+oauthlib==4.0.0
 packaging==21.3
 pluggy==0.13.1
 py==1.11.0
@@ -67,7 +67,7 @@ iniconfig==1.1.1
 itypes==1.2.0
 Jinja2==3.0.3
 MarkupSafe==2.1.0
-oauthlib==3.2.0
+oauthlib==4.0.0
 packaging==21.3
 pluggy==0.13.1
 py==1.11.0
